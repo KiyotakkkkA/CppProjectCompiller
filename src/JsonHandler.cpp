@@ -11,11 +11,21 @@ void JsonHandler::createJsonFile() {
     std::ifstream file(filename);
     if (!file) {
         std::ofstream outputFile(filename);
-        outputFile << "{\n\t\"SRC_PATH\": \"src\",\n\t\"EXE_NAME\": \"main\",\n\t\"MAIN_NAME\": \"main\"\n}"; 
+        std::string data = "{";
+        data += createField("SRC_PATH", "src");
+        data += createField("EXE_NAME", "main");
+        data += createField("MAIN_NAME", "main");
+        data += createField("RUN_AFTER_BUILD", "true");
+        data += "\n}";
+        outputFile << data;
         outputFile.close();
         return;
     }
     file.close();
+}
+
+std::string JsonHandler::createField(const char* fieldname, const char* value) {
+    return "\n\t\"" + std::string(fieldname) + "\": " + "\"" + std::string(value) + "\",";
 }
 
 std::unordered_map<std::string, std::string> JsonHandler::readJson() {
